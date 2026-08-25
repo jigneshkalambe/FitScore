@@ -5,9 +5,37 @@ dotenv.config();
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-async function analyzeResumeMatch(resumeText, jdText) {
+const analysisSchema = {
+    type: "object",
+    properties: {
+        score: {
+            type: "integer",
+            description: "Match score from 0 to 100.",
+            minimum: 0,
+            maximum: 100,
+        },
+        matchedSkills: {
+            type: "array",
+            description: "Skills present in both the resume and job description.",
+            items: { type: "string" },
+        },
+        missingSkills: {
+            type: "array",
+            description:
+                "Skills, tools, or qualifications explicitly required or preferred in the job description that are NOT mentioned anywhere in the resume. Go through the job description requirement by requirement and check each one against the resume. If a requirement is not clearly present in the resume, include it here. Only return an empty array if the resume genuinely covers every requirement.",
+            items: { type: "string" },
+        },
+        summary: {
+            type: "string",
+            description: "A 2-3 sentence plain-English verdict.",
+        },
+    },
+    required: ["score", "matchedSkills", "missingSkills", "summary"],
+};
+
+async function analyzeResumeMatch(resumeText, jdText, thinkingLevel = "medium") {
     const prompt = `
-You are a resume analysis assistant. Compare the resume below against the job description and return ONLY a valid JSON object — no markdown, no extra text, no explanation outside the JSON.
+You are a resume analysis assistant. Compare the resume below against the job description.
 
 Resume:
 """
@@ -18,20 +46,21 @@ Job Description:
 """
 ${jdText}
 """
-
-Return JSON in exactly this structure:
-{
-  "score": <number 0-100>,
-  "matchedSkills": [<array of strings>],
-  "missingSkills": [<array of strings>],
-  "summary": "<2-3 sentence plain-English verdict>"
-}
 `;
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.6-flash",
         contents: prompt,
+        config: {
+            thinkingConfig: {
+                thinkingLevel: thinkingLevel,
+            },
+            responseMimeType: "application/json",
+            responseSchema: analysisSchema,
+        },
     });
+
+    console.log("finishReason:", response.candidates?.[0]?.finishReason);
 
     const rawText = response.text;
 

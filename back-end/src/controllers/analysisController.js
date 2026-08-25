@@ -1,4 +1,5 @@
-import { errorResponse } from "../utils/responseHandler.js";
+import { errorResponse, successResponse } from "../utils/responseHandler.js";
+import { analyzeResumeMatch } from "../services/geminiService.js";
 
 const analyzeContent = async (req, res) => {
     try {
@@ -9,6 +10,10 @@ const analyzeContent = async (req, res) => {
             return errorResponse(res, 400, "Resume text and job description are required");
         }
 
+        if (jdText.trim().length < 100) {
+            return errorResponse(res, 422, "This doesn't look like a complete job description. Please paste the full JD including required skills and responsibilities.");
+        }
+
         // Check API key exists before even trying
         if (!process.env.GEMINI_API_KEY) {
             console.error("GEMINI_API_KEY is missing in environment variables");
@@ -16,6 +21,11 @@ const analyzeContent = async (req, res) => {
         }
 
         const result = await analyzeResumeMatch(resumeText, jdText);
+
+        if (!result.missingSkills || result.missingSkills.length === 0) {
+            console.warn("missingSkills came back empty — retrying with higher thinking level");
+            result = await analyzeResumeMatch(resumeText, jdText, "medium");
+        }
 
         return successResponse(res, 200, "Analysis completed successfully", result);
     } catch (err) {
