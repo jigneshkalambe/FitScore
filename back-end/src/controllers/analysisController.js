@@ -1,5 +1,6 @@
 import { errorResponse, successResponse } from "../utils/responseHandler.js";
 import { analyzeResumeMatch } from "../services/geminiService.js";
+import Analysis from "../models/Analysis.js";
 
 const analyzeContent = async (req, res) => {
     try {
@@ -20,7 +21,7 @@ const analyzeContent = async (req, res) => {
             return errorResponse(res, 500, "Server configuration error. Please try again later");
         }
 
-        const result = await analyzeResumeMatch(resumeText, jdText);
+        let result = await analyzeResumeMatch(resumeText, jdText);
 
         if (!result.missingSkills || result.missingSkills.length === 0) {
             console.warn("missingSkills came back empty — retrying with higher thinking level");
@@ -47,4 +48,85 @@ const analyzeContent = async (req, res) => {
     }
 };
 
-export { analyzeContent };
+const saveAnalysis = async (req, res, next) => {
+    try {
+        const { label, jdText, score, matchedSkills, missingSkills, summary } = req.body;
+        const userId = req.user._id;
+
+        if (!jdText || score === undefined || !matchedSkills || !missingSkills || !summary) {
+            return errorResponse(res, 400, "Missing required fields for saving analysis");
+        }
+
+        const analysis = new Analysis({
+            userId,
+            label,
+            jdText,
+            score,
+            matchedSkills,
+            missingSkills,
+            summary,
+        });
+
+        await analysis.save();
+
+        return successResponse(res, 201, "Analysis saved successfully", analysis);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getHistory = async (req, res, next) => {
+    try {
+        const userId = req.user._id;
+
+        const history = await Analysis.find({ userId }).sort({ createdAt: -1 });
+
+        return successResponse(res, 200, "Analysis history retrieved successfully", history);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getHistoryById = async (req, res, next) => {
+    try {
+        const userId = req.user._id;
+        const analysisId = req.params.id;
+
+        const analysis = await Analysis.findOne({ _id: analysisId });
+
+        if (!analysis) {
+            return errorResponse(res, 404, "Analysis not found");
+        }
+
+        if (analysis.userId.toString() !== userId.toString()) {
+            return errorResponse(res, 403, "You do not have permission to access this analysis");
+        }
+        return successResponse(res, 200, "Analysis retrieved successfully", analysis);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteHistoryById = async (req, res, next) => {
+    try {
+        const userId = req.user._id;
+        const analysisId = req.params.id;
+
+        const analysis = await Analysis.findOne({ _id: analysisId });
+
+        if (!analysis) {
+            return errorResponse(res, 404, "Analysis not found");
+        }
+
+        if (analysis.userId.toString() !== userId.toString()) {
+            return errorResponse(res, 403, "You do not have permission to access this analysis");
+        }
+
+        await Analysis.deleteOne({ _id: analysisId });
+        return successResponse(res, 200, "Analysis deleted successfully");
+    } catch (err) {
+        next(err);
+    }
+};
+
+export { analyzeContent, saveAnalysis, getHistory, getHistoryById, deleteHistoryById };
