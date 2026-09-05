@@ -43,6 +43,10 @@ const analyzeContent = async (req, res) => {
             return errorResponse(res, 502, "AI returned an unexpected response. Please try again");
         }
 
+        if (err.message.includes("503") || err.message.includes("UNAVAILABLE")) {
+            return errorResponse(res, 503, "The AI service is experiencing high demand right now. Please try again in a moment");
+        }
+
         // Fallback for anything else
         return errorResponse(res, 500, "Something went wrong while analyzing. Please try again");
     }

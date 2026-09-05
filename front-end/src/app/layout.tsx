@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import { AuthProvider } from "@/context/AuthContext";
+import { Toaster } from "sonner";
 
 const interFont = Inter({
     adjustFontFallback: true,
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <body>
                 <main className="h-screen">
                     <AuthProvider>{children}</AuthProvider>
+                    <Toaster position="top-right" />
                 </main>
             </body>
         </html>

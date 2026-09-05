@@ -1,12 +1,20 @@
 "use client";
-import { useState } from "react";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 
-export default function AuthDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
-    const [mode, setMode] = useState<"login" | "register">("login");
-
+export default function AuthDialog({
+    open,
+    onOpenChange,
+    mode,
+    setMode,
+}: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    mode: "login" | "register";
+    setMode: (mode: "login" | "register") => void;
+}) {
     const handleSuccess = () => {
         onOpenChange(false);
     };

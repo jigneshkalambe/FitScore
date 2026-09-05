@@ -6,12 +6,19 @@ import { Progress } from "./ui/progress";
 import { Separator } from "./ui/separator";
 import { ChartRadialShape } from "./ChartRadialShape";
 
-export default function ResultSection({ startOver }: { startOver: () => void }) {
-    const score = 82;
+interface AnalysisResult {
+    score: number;
+    matchedSkills: string[];
+    missingSkills: string[];
+    summary: string;
+}
 
-    const matchedSkills = ["Figma", "Prototyping", "User research", "Design systems", "Accessibility"];
+export default function ResultSection({ startOver, analysisResult }: { startOver: () => void; analysisResult: AnalysisResult | null }) {
+    const score = analysisResult?.score || 0;
 
-    const worthHighlighting = ["SQL", "A/B testing", "Analytics"];
+    const matchedSkills = analysisResult?.matchedSkills || [];
+
+    const worthHighlighting = analysisResult?.missingSkills || [];
 
     return (
         <div className="w-full max-w-7xl mx-auto flex flex-col gap-8 py-10">

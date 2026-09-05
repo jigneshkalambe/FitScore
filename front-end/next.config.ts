@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+    /* config options here */
+    reactCompiler: true,
+    logging: {
+        browserToTerminal: true,
+        fetches: {
+            fullUrl: true,
+        },
+    },
 };
 
 export default nextConfig;
