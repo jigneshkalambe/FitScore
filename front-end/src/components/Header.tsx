@@ -7,7 +7,7 @@ import AuthDialog from "./auth/AuthDialog";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 
-export default function Header() {
+export default function Header({ isIdle }: { isIdle: boolean }) {
     const [openAuthDialog, setOpenAuthDialog] = useState<boolean>(false);
     const [mode, setMode] = useState<"login" | "register">("login");
     const { isAuthenticated, logout } = useAuth();
@@ -29,14 +29,24 @@ export default function Header() {
     };
 
     useEffect(() => {
-        const handleUnauthorized = () => {
+        const handleSessionExpired = () => {
             setOpenAuthDialog(true);
             setMode("login");
             toast.error("Your session expired. Please log in again.");
         };
 
-        window.addEventListener("auth:unauthorized", handleUnauthorized);
-        return () => window.removeEventListener("auth:unauthorized", handleUnauthorized);
+        const handleOpenAuth = (e: Event) => {
+            const customEvent = e as CustomEvent<{ mode?: "login" | "register" }>;
+            setMode(customEvent.detail?.mode || "login");
+            setOpenAuthDialog(true);
+        };
+
+        window.addEventListener("auth:session-expired", handleSessionExpired);
+        window.addEventListener("auth:open", handleOpenAuth);
+        return () => {
+            window.removeEventListener("auth:session-expired", handleSessionExpired);
+            window.removeEventListener("auth:open", handleOpenAuth);
+        };
     }, []);
 
     return (
@@ -50,9 +60,11 @@ export default function Header() {
                     </div>
                     <div className="flex-grow flex justify-end">
                         <div className="inline-flex gap-4 items-center">
-                            <Button variant="ghost" onClick={handleHowItWorksClick}>
-                                How it works
-                            </Button>
+                            {isIdle && (
+                                <Button variant="ghost" onClick={handleHowItWorksClick}>
+                                    How it works
+                                </Button>
+                            )}
                             {isAuthenticated ? (
                                 <Button variant="destructive" onClick={logout}>
                                     Sign Out

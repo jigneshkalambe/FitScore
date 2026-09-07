@@ -1,49 +1,44 @@
 "use client";
 
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
-import { ChartContainer, type ChartConfig } from "@/components/ui/chart";
+interface ChartRadialShapeProps {
+    score: number;
+    color?: string;
+    size?: number;
+}
 
-export const description = "A radial chart with a custom shape";
+export function ChartRadialShape({ score, color = "#2563eb", size = 200 }: ChartRadialShapeProps) {
+    const strokeWidth = 14;
+    const radius = (size - strokeWidth * 2) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const clampedScore = Math.min(Math.max(score, 0), 100);
+    const strokeDashoffset = circumference - (clampedScore / 100) * circumference;
 
-const chartData = [{ browser: "safari", visitors: 1260, fill: "var(--color-safari)" }];
-
-const chartConfig = {
-    visitors: {
-        label: "Visitors",
-    },
-    safari: {
-        label: "Safari",
-        color: "var(--chart-2)",
-    },
-} satisfies ChartConfig;
-
-export function ChartRadialShape({ score }: { score: number }) {
     return (
-        <>
-            <ChartContainer config={chartConfig} className="aspect-square h-[250px]">
-                <RadialBarChart data={chartData} endAngle={100} innerRadius={65} outerRadius={95}>
-                    <PolarGrid gridType="circle" radialLines={false} stroke="none" className="first:fill-muted" polarRadius={[86, 74]} />
-                    <RadialBar dataKey="visitors" background />
-                    <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                        <Label
-                            content={({ viewBox }) => {
-                                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                                    return (
-                                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                                            <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-4xl font-bold">
-                                                {score}
-                                            </tspan>
-                                            <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
-                                                out of 100
-                                            </tspan>
-                                        </text>
-                                    );
-                                }
-                            }}
-                        />
-                    </PolarRadiusAxis>
-                </RadialBarChart>
-            </ChartContainer>
-        </>
+        <div className="relative flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
+            <svg className="transform -rotate-90" width={size} height={size}>
+                {/* Background track */}
+                <circle cx={size / 2} cy={size / 2} r={radius} className="stroke-slate-100" strokeWidth={strokeWidth} fill="transparent" />
+                {/* Progress track */}
+                <circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    stroke={color}
+                    strokeWidth={strokeWidth}
+                    strokeDasharray={circumference}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="round"
+                    fill="transparent"
+                    className="transition-all duration-1000 ease-out"
+                />
+            </svg>
+            <div className="absolute flex flex-col items-center justify-center text-center select-none">
+                <span className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">
+                    {clampedScore}
+                    <span className="text-2xl font-semibold text-muted-foreground">%</span>
+                </span>
+                <span className="text-xs font-semibold text-muted-foreground tracking-wider uppercase mt-1">Match Fit</span>
+            </div>
+        </div>
     );
 }

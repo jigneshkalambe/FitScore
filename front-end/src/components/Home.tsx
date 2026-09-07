@@ -116,7 +116,7 @@ export default function Home() {
 
     return (
         <>
-            <Header />
+            <Header isIdle={status === "idle"} />
             <div className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
                 {status === "idle" ? (
                     <UploadSection
@@ -140,7 +140,7 @@ export default function Home() {
                 ) : status === "analyzing" ? (
                     <AnalyzingSection />
                 ) : (
-                    <ResultSection startOver={startOver} analysisResult={analysisResult ? analysisResult : null} />
+                    <ResultSection startOver={startOver} analysisResult={analysisResult ? analysisResult : null} jdText={jdText} fileName={file?.name} />
                 )}
             </div>
             <input type="file" id="fileInput" className="hidden" onChange={handleFileChange} accept=".pdf,.docx" />
