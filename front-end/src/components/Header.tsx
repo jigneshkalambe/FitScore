@@ -1,29 +1,31 @@
 "use client";
 
-import { Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { History, Zap } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
 import AuthDialog from "./auth/AuthDialog";
-import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Header({ isIdle }: { isIdle: boolean }) {
     const [openAuthDialog, setOpenAuthDialog] = useState<boolean>(false);
     const [mode, setMode] = useState<"login" | "register">("login");
     const { isAuthenticated, logout } = useAuth();
+    const router = useRouter();
 
     const handleHowItWorksClick = () => {
         const howItWorksSection = document.getElementById("how-it-works");
         if (howItWorksSection) {
             howItWorksSection.scrollIntoView({ behavior: "smooth", block: "center" });
-            howItWorksSection.style.border = "1px solid #3b82f6"; // Light blue border
-            howItWorksSection.style.borderRadius = "8px"; // Rounded corners
-            howItWorksSection.style.padding = "8px"; // Padding for better visibility
-            howItWorksSection.style.transition = "all 0.2s linear"; // Smooth transition for border
+            howItWorksSection.style.border = "1px solid #3b82f6";
+            howItWorksSection.style.borderRadius = "8px";
+            howItWorksSection.style.padding = "8px";
+            howItWorksSection.style.transition = "all 0.2s linear";
             setTimeout(() => {
-                howItWorksSection.style.border = ""; // Reset border after 2 seconds
-                howItWorksSection.style.borderRadius = ""; // Reset border radius
-                howItWorksSection.style.padding = ""; // Reset padding
+                howItWorksSection.style.border = "";
+                howItWorksSection.style.borderRadius = "";
+                howItWorksSection.style.padding = "";
             }, 2000);
         }
     };
@@ -32,7 +34,7 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
         const handleSessionExpired = () => {
             setOpenAuthDialog(true);
             setMode("login");
-            toast.error("Your session expired. Please log in again.");
+            // toast.error("Your session expired. Please log in again.");
         };
 
         const handleOpenAuth = (e: Event) => {
@@ -51,28 +53,37 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
 
     return (
         <>
-            <div className="border-b border-b-slate-200 py-4 px-6">
+            <div className="border-b border-b-slate-200 py-4 px-6 bg-white">
                 <div className="flex gap-5 w-full max-w-7xl mx-auto items-center">
-                    <div className="flex-grow">
-                        <span className="gap-2 bg-blue-500 px-3 py-1 rounded-full items-center  font-bold text-base text-white inline-flex">
-                            <Zap className="h-6 w-6 text-white" /> FitScore
-                        </span>
+                    <div className="grow">
+                        <Link href="/" className="gap-2 bg-blue-500 hover:bg-blue-600 transition-colors px-3 py-1 rounded-full items-center font-bold text-base text-white inline-flex">
+                            <Zap className="h-5 w-5 text-white" /> FitScore
+                        </Link>
                     </div>
-                    <div className="flex-grow flex justify-end">
-                        <div className="inline-flex gap-4 items-center">
+                    <div className="grow flex justify-end">
+                        <div className="inline-flex gap-3 items-center">
                             {isIdle && (
                                 <Button variant="ghost" onClick={handleHowItWorksClick}>
                                     How it works
                                 </Button>
                             )}
+
                             {isAuthenticated ? (
-                                <Button variant="destructive" onClick={logout}>
-                                    Sign Out
-                                </Button>
+                                <>
+                                    <Button variant="ghost" className=" gap-1.5 flex" onClick={() => router.push("/history")}>
+                                        <History className="w-4 h-4" />
+                                        History
+                                    </Button>
+                                    <Button variant="destructive" size="sm" className="rounded-xl" onClick={logout}>
+                                        Sign Out
+                                    </Button>
+                                </>
                             ) : (
                                 <>
                                     <Button
                                         variant="outline"
+                                        size="sm"
+                                        className="rounded-xl border-slate-200"
                                         onClick={() => {
                                             setMode("login");
                                             setOpenAuthDialog(true);
@@ -81,7 +92,8 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
                                         Sign In
                                     </Button>
                                     <Button
-                                        variant="outline"
+                                        size="sm"
+                                        className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
                                         onClick={() => {
                                             setMode("register");
                                             setOpenAuthDialog(true);

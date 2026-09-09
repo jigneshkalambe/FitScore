@@ -29,3 +29,13 @@ export async function saveAnalysis(payload: SaveAnalysisPayload) {
     const res = await Axios.post("/analysis/save", payload);
     return res.data;
 }
+
+export async function getHistory() {
+    const res = await Axios.get("/analysis/history");
+    return res.data;
+}
+
+export async function deleteAnalysis(id: string) {
+    const res = await Axios.delete(`/analysis/history/${id}`);
+    return res.data;
+}

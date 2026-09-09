@@ -90,7 +90,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                         <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-medium px-2.5 py-0.5 text-xs rounded-full">
                             FitScore Report
                         </Badge>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1 truncate max-w-[240px]">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1 truncate max-w-60">
                             <FileText className="w-3.5 h-3.5" />
                             {fileName}
                         </span>
@@ -185,7 +185,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
             {/* Skills Breakdown Grid (Matched vs Missing) */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Matched Skills Card */}
-                <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
+                <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col py-0">
                     <CardHeader className="p-6 pb-4 bg-emerald-500/5 border-b border-emerald-500/10">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
@@ -227,7 +227,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                 </Card>
 
                 {/* Missing Skills Card */}
-                <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
+                <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col py-0">
                     <CardHeader className="p-6 pb-4 bg-amber-500/5 border-b border-amber-500/10">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
@@ -270,7 +270,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
             </div>
 
             {/* Bottom Save & History Banner */}
-            <Card className="rounded-3xl border border-slate-200/80 bg-gradient-to-r from-slate-50 via-blue-50/20 to-slate-50 shadow-sm">
+            <Card className="rounded-3xl border border-slate-200/80 bg-linear-to-r from-slate-50 via-blue-50/20 to-slate-50 shadow-sm">
                 <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 p-6 sm:p-7">
                     <div className="flex items-start gap-4">
                         <div className="p-3 rounded-2xl bg-blue-100 text-blue-600 shrink-0 mt-0.5">
