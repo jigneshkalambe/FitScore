@@ -1,4 +1,4 @@
-import Axios from "@/instance/Axios";
+import Axios from "@/lib/axios";
 
 interface UploadResumeResponse {
     success: boolean;

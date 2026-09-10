@@ -1,5 +1,5 @@
-import Home from "@/components/Home";
+import ScannerView from "@/features/scanner/components/ScannerView";
 
 export default function page() {
-    return <Home />;
+    return <ScannerView />;
 }

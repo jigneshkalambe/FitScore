@@ -1,4 +1,4 @@
-import Axios from "@/instance/Axios";
+import Axios from "@/lib/axios";
 
 const registerUser = async ({ name, email, password }: { name: string; email: string; password: string }) => {
     const response = await Axios.post("/auth/register", { name, email, password });

@@ -3,15 +3,16 @@
 import { useState } from "react";
 import axios from "axios";
 import { BadgeAlert, BadgeCheck, Bookmark, Check, CheckCircle2, FileText, RotateCcw, Sparkles } from "lucide-react";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Progress } from "./ui/progress";
-import { ChartRadialShape } from "./ChartRadialShape";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Badge } from "../../../components/ui/badge";
+import { Progress } from "../../../components/ui/progress";
+import { ChartRadialShape } from "../../../components/charts/ChartRadialShape";
 import { getScoreBand } from "@/lib/scoreBands";
 import { useAuth } from "@/context/AuthContext";
 import { saveAnalysis } from "@/lib/api/analysis";
 import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
 
 interface AnalysisResult {
     score: number;
@@ -31,6 +32,8 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
     const { isAuthenticated } = useAuth();
     const [isSaving, setIsSaving] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [label, setLabel] = useState("");
+    const [showLable, setShowLabel] = useState(false);
 
     const score = analysisResult?.score ?? 0;
     const matchedSkills = analysisResult?.matchedSkills ?? [];
@@ -59,7 +62,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
         setIsSaving(true);
         try {
             await saveAnalysis({
-                label: fileName.replace(/\.[^/.]+$/, "") || "Role Match",
+                label: label || fileName.replace(/\.[^/.]+$/, "") || "Role Match",
                 jdText: jdText || "Job Description",
                 score: analysisResult.score,
                 matchedSkills: analysisResult.matchedSkills,
@@ -78,6 +81,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
             toast.error(message);
         } finally {
             setIsSaving(false);
+            setShowLabel(false);
         }
     };
 
@@ -105,7 +109,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                         Start Over
                     </Button>
 
-                    <Button
+                    {/* <Button
                         variant={isSaved ? "secondary" : "default"}
                         size="sm"
                         disabled={isSaving}
@@ -123,7 +127,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                                 {isSaving ? "Saving..." : "Save Result"}
                             </>
                         )}
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
 
@@ -289,24 +293,58 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                     </div>
 
                     <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-                        <Button
-                            variant={isSaved ? "secondary" : "default"}
-                            disabled={isSaving}
-                            className={`rounded-xl px-5 h-11 font-medium shrink-0 w-full sm:w-auto ${isSaved ? "bg-emerald-50 text-emerald-700" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-                            onClick={handleSave}
-                        >
-                            {isSaved ? (
-                                <>
-                                    <Check className="mr-2 h-4 w-4" />
-                                    Saved to History
-                                </>
-                            ) : (
-                                <>
-                                    <Bookmark className="mr-2 h-4 w-4" />
-                                    {isSaving ? "Saving..." : isAuthenticated ? "Save to History" : "Sign In & Save"}
-                                </>
-                            )}
-                        </Button>
+                        <Popover open={showLable} onOpenChange={(open) => setShowLabel(open)}>
+                            <PopoverTrigger
+                                render={
+                                    <Button
+                                        variant={isSaved ? "secondary" : "default"}
+                                        disabled={isSaving || isSaved}
+                                        className={`rounded-xl px-5 h-11 font-medium shrink-0 w-full sm:w-auto ${isSaved ? "bg-emerald-50 text-emerald-700" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
+                                        onClick={() => {
+                                            if (!isSaved) setShowLabel(true);
+                                        }}
+                                    >
+                                        {isSaved ? (
+                                            <>
+                                                <Check className="mr-2 h-4 w-4" />
+                                                Saved to History
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Bookmark className="mr-2 h-4 w-4" />
+                                                {isSaving ? "Saving..." : isAuthenticated ? "Save to History" : "Sign In & Save"}
+                                            </>
+                                        )}
+                                    </Button>
+                                }
+                            />
+                            <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-4" align="end" sideOffset={8}>
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col gap-1">
+                                        <label htmlFor="labelInput" className="text-sm font-medium text-foreground">
+                                            Label for this analysis
+                                        </label>
+                                        <input
+                                            id="labelInput"
+                                            type="text"
+                                            autoFocus
+                                            value={label}
+                                            onChange={(e) => setLabel(e.target.value)}
+                                            placeholder="e.g., Frontend Developer Role"
+                                            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        />
+                                    </div>
+                                    <Button
+                                        variant="default"
+                                        className="w-full h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                                        onClick={handleSave}
+                                        disabled={isSaving || label.trim().length === 0}
+                                    >
+                                        {isSaving ? "Saving..." : "Save Analysis"}
+                                    </Button>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
                     </div>
                 </CardContent>
             </Card>

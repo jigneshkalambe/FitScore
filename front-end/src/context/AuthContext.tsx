@@ -1,5 +1,5 @@
 "use client";
-import { getMe } from "@/lib/api/auth";
+import { getMe } from "@/features/auth/api/auth";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -12,6 +12,7 @@ type AuthContextType = {
     logout: () => void;
     isAuthenticated: boolean;
     setIsAuthenticated: (value: boolean) => void;
+    isLoading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         checkAuth();
@@ -47,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (!storedToken) {
             setIsAuthenticated(false);
+            setIsLoading(false);
             return;
         }
         if (storedUser) {
@@ -65,11 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 setIsAuthenticated(false);
             }
         } catch (error: any) {
+            logout();
             toast.error(error.response?.data?.message || "Session expired. Please log in again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    return <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated, setIsAuthenticated }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated, setIsAuthenticated, isLoading }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

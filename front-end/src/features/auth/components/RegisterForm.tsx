@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { registerUser } from "@/lib/api/auth";
+import { registerUser } from "@/features/auth/api/auth";
 
 export default function RegisterForm({ onSuccess, onSwitchToLogin }: { onSuccess: () => void; onSwitchToLogin: () => void }) {
     const [name, setName] = useState("");

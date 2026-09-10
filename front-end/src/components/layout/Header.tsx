@@ -3,15 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { History, Zap } from "lucide-react";
-import { Button } from "./ui/button";
-import AuthDialog from "./auth/AuthDialog";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import AuthDialog from "@/features/auth/components/AuthDialog";
 
 export default function Header({ isIdle }: { isIdle: boolean }) {
     const [openAuthDialog, setOpenAuthDialog] = useState<boolean>(false);
     const [mode, setMode] = useState<"login" | "register">("login");
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout, isLoading } = useAuth();
     const router = useRouter();
 
     const handleHowItWorksClick = () => {
@@ -68,7 +68,12 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
                                 </Button>
                             )}
 
-                            {isAuthenticated ? (
+                            {isLoading ? (
+                                <div className="flex gap-2">
+                                    <div className="w-16 h-8 bg-slate-100 animate-pulse rounded-xl" />
+                                    <div className="w-16 h-8 bg-slate-100 animate-pulse rounded-xl" />
+                                </div>
+                            ) : isAuthenticated ? (
                                 <>
                                     <Button variant="ghost" className=" gap-1.5 flex" onClick={() => router.push("/history")}>
                                         <History className="w-4 h-4" />

@@ -1,13 +1,13 @@
 "use client";
 import { ChangeEvent, DragEvent, useState } from "react";
-import Header from "./Header";
-import UploadSection from "./UploadSection";
 import AnalyzeSection from "./AnalyzeSection";
 import ResultSection from "./ResultSection";
 import AnalyzingSection from "./AnalyzingSection";
-import { uploadResume } from "@/lib/api/resume";
+import { uploadResume } from "@/features/scanner/api/resume";
 import { toast } from "sonner";
 import { analyzeResume } from "@/lib/api/analysis";
+import UploadSection from "./UploadSection";
+import Header from "@/components/layout/Header";
 
 const ALLOWED_TYPES = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -19,14 +19,14 @@ interface AnalysisResult {
     summary: string;
 }
 
-export default function Home() {
+export default function ScannerView() {
     const [status, setStatus] = useState<"idle" | "reviewing" | "analyzing" | "done">("idle");
     const [file, setFile] = useState<File | null>(null);
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const [extractedText, setExtractedText] = useState<string>("");
     const [isUploading, setIsUploading] = useState(false);
     const [jdText, setJdText] = useState<string>(
-        "We are looking for a Backend Developer to join our engineering team and help build reliable, high-performance server-side applications.\n\nResponsibilities:\n- Develop and maintain backend services using Python and Django\n- Design and implement RESTful APIs and backend integrations\n- Work with databases and optimize queries for performance\n- Implement authentication, authorization, and security best practices\n- Write unit and integration tests for backend services\n- Debug production issues and improve application reliability\n- Collaborate with frontend developers and product teams\n- Participate in code reviews and technical design discussions\n\nRequirements:\n- 1-3 years of experience in backend development\n- Strong proficiency in Python\n- Experience with Django or Django REST Framework\n- Good understanding of REST API architecture\n- Experience with PostgreSQL or similar relational databases\n- Familiarity with Redis and background job processing\n- Understanding of authentication mechanisms such as JWT or OAuth\n- Experience with Git and collaborative development workflows\n- Knowledge of data structures, algorithms, and software design principles\n- Strong problem-solving and communication skills\n\nNice to have:\n- Experience with Celery\n- Familiarity with Docker and Kubernetes\n- Experience with AWS services\n- Knowledge of CI/CD pipelines\n- Exposure to microservices architecture"
+        "We are looking for a Backend Developer to join our engineering team and help build reliable, high-performance server-side applications.\n\nResponsibilities:\n- Develop and maintain backend services using Python and Django\n- Design and implement RESTful APIs and backend integrations\n- Work with databases and optimize queries for performance\n- Implement authentication, authorization, and security best practices\n- Write unit and integration tests for backend services\n- Debug production issues and improve application reliability\n- Collaborate with frontend developers and product teams\n- Participate in code reviews and technical design discussions\n\nRequirements:\n- 1-3 years of experience in backend development\n- Strong proficiency in Python\n- Experience with Django or Django REST Framework\n- Good understanding of REST API architecture\n- Experience with PostgreSQL or similar relational databases\n- Familiarity with Redis and background job processing\n- Understanding of authentication mechanisms such as JWT or OAuth\n- Experience with Git and collaborative development workflows\n- Knowledge of data structures, algorithms, and software design principles\n- Strong problem-solving and communication skills\n\nNice to have:\n- Experience with Celery\n- Familiarity with Docker and Kubernetes\n- Experience with AWS services\n- Knowledge of CI/CD pipelines\n- Exposure to microservices architecture",
     );
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 

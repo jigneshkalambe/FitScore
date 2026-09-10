@@ -1,5 +1,5 @@
 import { CloudUpload, LoaderCircle, Lock, Sparkles } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { ChangeEvent, DragEvent } from "react";
 
 interface UploadSectionProps {
