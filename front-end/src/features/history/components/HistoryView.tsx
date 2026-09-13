@@ -112,26 +112,26 @@ export default function HistoryPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50/50">
+        <div className="min-h-screen bg-slate-50/50 flex flex-col">
             <Header isIdle={false} />
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-                <div className="flex flex-col gap-8">
+            <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 flex-1 flex flex-col gap-6 sm:gap-8">
+                <div className="flex flex-col gap-6 sm:gap-8">
                     {/* Page Header */}
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
                         <div>
-                            <div className="flex items-center gap-2 mb-2">
+                            <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
                                 <Link href="/" className="text-xs text-blue-600 hover:underline flex items-center gap-1 font-medium">
                                     <ArrowLeft className="w-3.5 h-3.5" /> Back to Scanner
                                 </Link>
                             </div>
-                            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Analysis History</h1>
-                            <p className="text-slate-500 text-sm sm:text-base mt-1">Review saved job matches, compare scores, and manage your analysis archive.</p>
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">Analysis History</h1>
+                            <p className="text-slate-500 text-xs sm:text-sm md:text-base mt-1">Review saved job matches, compare scores, and manage your analysis archive.</p>
                         </div>
 
-                        <div className="flex items-center gap-3 shrink-0">
-                            <Button className=" bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm" onClick={() => router.push("/")}>
-                                <Plus className="mr-1 h-4 w-4" />
+                        <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">
+                            <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs h-10 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-1.5" onClick={() => router.push("/")}>
+                                <Plus className="h-4 w-4" />
                                 New Analysis
                             </Button>
                         </div>
@@ -142,7 +142,7 @@ export default function HistoryPage() {
 
                     {/* History Cards Grid */}
                     {isLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {Array.from({ length: 3 }).map((_, i) => (
                                 <HistoryCardSkeleton key={i} />
                             ))}
@@ -150,7 +150,7 @@ export default function HistoryPage() {
                     ) : filteredList.length === 0 ? (
                         <EmptyHistoryState searchQuery={searchQuery} />
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {filteredList.map((item) => {
                                 const band = getScoreBand(item.score);
                                 return (

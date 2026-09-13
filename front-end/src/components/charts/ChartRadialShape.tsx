@@ -16,8 +16,8 @@ export function ChartRadialShape({ score, color = "#2563eb", size, className = "
 
     return (
         <div
-            className={`relative flex items-center justify-center shrink-0 aspect-square ${size ? "" : "w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44"} ${className}`}
-            style={size ? { width: size, height: size } : undefined}
+            className={`relative flex items-center justify-center shrink-0 aspect-square ${size ? "max-w-full max-h-full" : "w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52"} ${className}`}
+            style={size ? { width: size, height: size, maxWidth: "100%", maxHeight: "100%" } : undefined}
         >
             <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 {/* Background track */}

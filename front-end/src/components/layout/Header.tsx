@@ -53,33 +53,33 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
 
     return (
         <>
-            <div className="border-b border-b-slate-200 py-4 px-6 bg-white">
-                <div className="flex gap-5 w-full max-w-7xl mx-auto items-center">
-                    <div className="grow">
-                        <Link href="/" className="gap-2 bg-blue-500 hover:bg-blue-600 transition-colors px-3 py-1 rounded-full items-center font-bold text-base text-white inline-flex">
-                            <Zap className="h-5 w-5 text-white" /> FitScore
+            <div className="border-b border-b-slate-200 py-3 sm:py-4 px-4 sm:px-6 bg-white">
+                <div className="flex gap-2 sm:gap-5 w-full max-w-7xl mx-auto items-center justify-between">
+                    <div className="shrink-0">
+                        <Link href="/" className="gap-1.5 sm:gap-2 bg-blue-500 hover:bg-blue-600 transition-colors px-2.5 sm:px-3 py-1 rounded-full items-center font-bold text-sm sm:text-base text-white inline-flex shrink-0">
+                            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" /> FitScore
                         </Link>
                     </div>
-                    <div className="grow flex justify-end">
-                        <div className="inline-flex gap-3 items-center">
+                    <div className="flex items-center justify-end">
+                        <div className="inline-flex gap-2 sm:gap-3 items-center">
                             {isIdle && (
-                                <Button variant="ghost" onClick={handleHowItWorksClick}>
+                                <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-xs sm:text-sm" onClick={handleHowItWorksClick}>
                                     How it works
                                 </Button>
                             )}
 
                             {isLoading ? (
                                 <div className="flex gap-2">
-                                    <div className="w-16 h-8 bg-slate-100 animate-pulse rounded-xl" />
-                                    <div className="w-16 h-8 bg-slate-100 animate-pulse rounded-xl" />
+                                    <div className="w-14 sm:w-16 h-8 bg-slate-100 animate-pulse rounded-xl" />
+                                    <div className="w-14 sm:w-16 h-8 bg-slate-100 animate-pulse rounded-xl" />
                                 </div>
                             ) : isAuthenticated ? (
                                 <>
-                                    <Button variant="ghost" className=" gap-1.5 flex" onClick={() => router.push("/history")}>
-                                        <History className="w-4 h-4" />
+                                    <Button variant="ghost" size="sm" className="gap-1 sm:gap-1.5 flex text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9" onClick={() => router.push("/history")}>
+                                        <History className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         History
                                     </Button>
-                                    <Button variant="destructive" size="sm" className="rounded-xl" onClick={logout}>
+                                    <Button variant="destructive" size="sm" className="rounded-xl text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9" onClick={logout}>
                                         Sign Out
                                     </Button>
                                 </>
@@ -88,7 +88,7 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="rounded-xl border-slate-200"
+                                        className="rounded-xl border-slate-200 text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9"
                                         onClick={() => {
                                             setMode("login");
                                             setOpenAuthDialog(true);
@@ -98,7 +98,7 @@ export default function Header({ isIdle }: { isIdle: boolean }) {
                                     </Button>
                                     <Button
                                         size="sm"
-                                        className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
+                                        className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9"
                                         onClick={() => {
                                             setMode("register");
                                             setOpenAuthDialog(true);

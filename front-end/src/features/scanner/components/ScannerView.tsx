@@ -25,9 +25,7 @@ export default function ScannerView() {
     const [isDragging, setIsDragging] = useState<boolean>(false);
     const [extractedText, setExtractedText] = useState<string>("");
     const [isUploading, setIsUploading] = useState(false);
-    const [jdText, setJdText] = useState<string>(
-        "We are looking for a Backend Developer to join our engineering team and help build reliable, high-performance server-side applications.\n\nResponsibilities:\n- Develop and maintain backend services using Python and Django\n- Design and implement RESTful APIs and backend integrations\n- Work with databases and optimize queries for performance\n- Implement authentication, authorization, and security best practices\n- Write unit and integration tests for backend services\n- Debug production issues and improve application reliability\n- Collaborate with frontend developers and product teams\n- Participate in code reviews and technical design discussions\n\nRequirements:\n- 1-3 years of experience in backend development\n- Strong proficiency in Python\n- Experience with Django or Django REST Framework\n- Good understanding of REST API architecture\n- Experience with PostgreSQL or similar relational databases\n- Familiarity with Redis and background job processing\n- Understanding of authentication mechanisms such as JWT or OAuth\n- Experience with Git and collaborative development workflows\n- Knowledge of data structures, algorithms, and software design principles\n- Strong problem-solving and communication skills\n\nNice to have:\n- Experience with Celery\n- Familiarity with Docker and Kubernetes\n- Experience with AWS services\n- Knowledge of CI/CD pipelines\n- Exposure to microservices architecture",
-    );
+    const [jdText, setJdText] = useState<string>("");
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
     const validateFile = (file: File): string | null => {
@@ -117,7 +115,7 @@ export default function ScannerView() {
     return (
         <>
             <Header isIdle={status === "idle"} />
-            <div className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+            <div className="w-full flex-1 py-6 sm:py-8 md:py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-6 sm:gap-8 md:gap-10">
                 {status === "idle" ? (
                     <UploadSection
                         handleFileChange={handleFileChange}

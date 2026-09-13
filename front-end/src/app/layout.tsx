@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
-        <html lang="en" className={`${interFont.className} h-full antialiased`}>
-            <body>
-                <main className="h-screen">
+        <html lang="en" className={`${interFont.className} min-h-full antialiased`}>
+            <body className="min-h-full flex flex-col">
+                <main className="min-h-screen flex flex-col flex-1">
                     <AuthProvider>{children}</AuthProvider>
                     <Toaster position="top-right" />
                 </main>

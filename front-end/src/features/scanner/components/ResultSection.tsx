@@ -86,60 +86,40 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
     };
 
     return (
-        <div className="w-full max-w-7xl mx-auto flex flex-col gap-8 py-6 sm:py-10">
+        <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 sm:gap-8 py-4 sm:py-8">
             {/* Header / Action Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/40">
-                <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-border/40">
+                <div className="flex flex-col gap-1.5 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
                         <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-medium px-2.5 py-0.5 text-xs rounded-full">
                             FitScore Report
                         </Badge>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1 truncate max-w-60">
-                            <FileText className="w-3.5 h-3.5" />
-                            {fileName}
+                        <span className="text-xs text-muted-foreground flex items-center gap-1 truncate max-w-44 sm:max-w-64">
+                            <FileText className="w-3.5 h-3.5 shrink-0" />
+                            <span className="truncate">{fileName}</span>
                         </span>
                     </div>
-                    <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{scoreBand.headline}</h2>
-                    <p className="text-sm sm:text-base text-muted-foreground">{scoreBand.subheading}</p>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground">{scoreBand.headline}</h2>
+                    <p className="text-xs sm:text-sm md:text-base text-muted-foreground">{scoreBand.subheading}</p>
                 </div>
 
-                <div className="flex items-center gap-3 shrink-0">
-                    <Button variant="outline" size="sm" className="h-10 px-4 rounded-xl border-slate-200 hover:bg-slate-50" onClick={startOver}>
+                <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">
+                    <Button variant="outline" size="sm" className="h-10 px-4 rounded-xl border-slate-200 hover:bg-slate-50 w-full sm:w-auto" onClick={startOver}>
                         <RotateCcw className="mr-2 h-4 w-4 text-muted-foreground" />
                         Start Over
                     </Button>
-
-                    {/* <Button
-                        variant={isSaved ? "secondary" : "default"}
-                        size="sm"
-                        disabled={isSaving}
-                        className={`h-10 px-4 rounded-xl font-medium ${isSaved ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-                        onClick={handleSave}
-                    >
-                        {isSaved ? (
-                            <>
-                                <Check className="mr-2 h-4 w-4" />
-                                Saved
-                            </>
-                        ) : (
-                            <>
-                                <Bookmark className="mr-2 h-4 w-4" />
-                                {isSaving ? "Saving..." : "Save Result"}
-                            </>
-                        )}
-                    </Button> */}
                 </div>
             </div>
 
             {/* Hero Overview Card: Radial Score & AI Verdict */}
-            <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden bg-card">
-                <CardContent className="p-6 sm:p-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <Card className="rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden bg-card">
+                <CardContent className="p-4 sm:p-6 md:p-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
                         {/* Radial Gauge & Match Metric */}
-                        <div className="lg:col-span-4 flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50/60 border border-slate-100">
-                            <ChartRadialShape score={score} color={scoreBand.colorHex} size={210} />
+                        <div className="lg:col-span-4 flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl bg-slate-50/60 border border-slate-100">
+                            <ChartRadialShape score={score} color={scoreBand.colorHex} className="w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48" />
 
-                            <div className="w-full mt-4 flex flex-col gap-2">
+                            <div className="w-full max-w-xs mt-4 flex flex-col gap-1.5 sm:gap-2">
                                 <div className="flex justify-between items-center text-xs font-semibold">
                                     <span className="text-muted-foreground">Alignment Score</span>
                                     <span className={scoreBand.textClass}>{score}/100</span>
@@ -149,36 +129,36 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                         </div>
 
                         {/* Assessment & Summary */}
-                        <div className="lg:col-span-8 flex flex-col justify-center gap-5">
-                            <div className="flex flex-wrap items-center gap-2.5">
+                        <div className="lg:col-span-8 flex flex-col justify-center gap-4 sm:gap-5">
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                                 <Badge className={`rounded-full px-3 py-1 font-semibold text-xs border ${scoreBand.badgeClass}`}>{scoreBand.label}</Badge>
-                                <span className="text-xs text-muted-foreground">Based on resume keywords & JD requirements</span>
+                                <span className="text-[11px] sm:text-xs text-muted-foreground">Based on resume keywords & JD requirements</span>
                             </div>
 
                             {/* AI Summary Box */}
-                            <div className="relative rounded-2xl bg-blue-50/50 border border-blue-100 p-5">
-                                <div className="flex items-center gap-2 mb-2 text-blue-700 text-xs font-semibold tracking-wide uppercase">
-                                    <Sparkles className="w-4 h-4 text-blue-600" />
+                            <div className="relative rounded-xl sm:rounded-2xl bg-blue-50/50 border border-blue-100 p-4 sm:p-5">
+                                <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-blue-700 text-xs font-semibold tracking-wide uppercase">
+                                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 shrink-0" />
                                     AI Summary & Verdict
                                 </div>
-                                <p className="text-sm sm:text-base leading-relaxed text-slate-700 font-normal">{summary || "No summary available for this analysis."}</p>
+                                <p className="text-xs sm:text-sm md:text-base leading-relaxed text-slate-700 font-normal">{summary || "No summary available for this analysis."}</p>
                             </div>
 
                             {/* Micro Metrics Strip */}
-                            <div className="grid grid-cols-3 gap-3 pt-1">
-                                <div className="flex flex-col p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                    <span className="text-xs text-muted-foreground font-medium">Matched Skills</span>
-                                    <span className="text-lg font-bold text-emerald-600 mt-0.5">{matchedSkills.length}</span>
+                            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-1">
+                                <div className="flex flex-col p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <span className="text-[10px] sm:text-xs text-muted-foreground font-medium truncate">Matched Skills</span>
+                                    <span className="text-base sm:text-lg md:text-xl font-bold text-emerald-600 mt-0.5">{matchedSkills.length}</span>
                                 </div>
 
-                                <div className="flex flex-col p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                    <span className="text-xs text-muted-foreground font-medium">Skill Gaps</span>
-                                    <span className="text-lg font-bold text-amber-600 mt-0.5">{missingSkills.length}</span>
+                                <div className="flex flex-col p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <span className="text-[10px] sm:text-xs text-muted-foreground font-medium truncate">Skill Gaps</span>
+                                    <span className="text-base sm:text-lg md:text-xl font-bold text-amber-600 mt-0.5">{missingSkills.length}</span>
                                 </div>
 
-                                <div className="flex flex-col p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                    <span className="text-xs text-muted-foreground font-medium">Keywords Coverage</span>
-                                    <span className="text-lg font-bold text-blue-600 mt-0.5">{matchPercentage}%</span>
+                                <div className="flex flex-col p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <span className="text-[10px] sm:text-xs text-muted-foreground font-medium truncate">Coverage</span>
+                                    <span className="text-base sm:text-lg md:text-xl font-bold text-blue-600 mt-0.5">{matchPercentage}%</span>
                                 </div>
                             </div>
                         </div>
@@ -187,86 +167,86 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
             </Card>
 
             {/* Skills Breakdown Grid (Matched vs Missing) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Matched Skills Card */}
-                <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col py-0">
-                    <CardHeader className="p-6 pb-4 bg-emerald-500/5 border-b border-emerald-500/10">
+                <Card className="rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col py-0">
+                    <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4 bg-emerald-500/5 border-b border-emerald-500/10">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2.5">
-                                <div className="p-2 rounded-xl bg-emerald-100 text-emerald-700">
-                                    <BadgeCheck className="w-5 h-5" />
+                            <div className="flex items-center gap-2 sm:gap-2.5">
+                                <div className="p-1.5 sm:p-2 rounded-xl bg-emerald-100 text-emerald-700">
+                                    <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg font-bold text-foreground">Matched Skills</CardTitle>
-                                    <p className="text-xs text-muted-foreground mt-0.5">Qualifications verified in your resume</p>
+                                    <CardTitle className="text-base sm:text-lg font-bold text-foreground">Matched Skills</CardTitle>
+                                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">Qualifications verified in your resume</p>
                                 </div>
                             </div>
-                            <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full">
+                            <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 font-semibold px-2 sm:px-2.5 py-0.5 rounded-full text-xs">
                                 {matchedSkills.length}
                             </Badge>
                         </div>
                     </CardHeader>
 
-                    <CardContent className="p-6 flex-1 flex flex-col">
+                    <CardContent className="p-4 sm:p-6 flex-1 flex flex-col">
                         {matchedSkills.length > 0 ? (
-                            <div className="flex flex-wrap gap-2.5">
+                            <div className="flex flex-wrap gap-2 sm:gap-2.5">
                                 {matchedSkills.map((skill, index) => (
                                     <Badge
                                         key={`${skill}-${index}`}
                                         variant="outline"
-                                        className="py-1.5 px-3 rounded-xl border-emerald-200 bg-emerald-50/50 text-emerald-800 font-medium text-xs sm:text-sm flex items-center gap-1.5"
+                                        className="py-1 sm:py-1.5 px-2.5 sm:px-3 rounded-lg sm:rounded-xl border-emerald-200 bg-emerald-50/50 text-emerald-800 font-medium text-xs sm:text-sm flex items-center gap-1.5 max-w-full break-words"
                                     >
                                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                                        {skill}
+                                        <span className="break-words">{skill}</span>
                                     </Badge>
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
-                                <BadgeAlert className="w-8 h-8 mb-2 opacity-40" />
-                                <p className="text-sm">No direct matching skills detected.</p>
+                            <div className="flex-1 flex flex-col items-center justify-center py-6 sm:py-8 text-center text-muted-foreground">
+                                <BadgeAlert className="w-7 h-7 sm:w-8 sm:h-8 mb-2 opacity-40" />
+                                <p className="text-xs sm:text-sm">No direct matching skills detected.</p>
                             </div>
                         )}
                     </CardContent>
                 </Card>
 
                 {/* Missing Skills Card */}
-                <Card className="rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col py-0">
-                    <CardHeader className="p-6 pb-4 bg-amber-500/5 border-b border-amber-500/10">
+                <Card className="rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col py-0">
+                    <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4 bg-amber-500/5 border-b border-amber-500/10">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2.5">
-                                <div className="p-2 rounded-xl bg-amber-100 text-amber-700">
-                                    <BadgeAlert className="w-5 h-5" />
+                            <div className="flex items-center gap-2 sm:gap-2.5">
+                                <div className="p-1.5 sm:p-2 rounded-xl bg-amber-100 text-amber-700">
+                                    <BadgeAlert className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg font-bold text-foreground">Key Missing Skills & Gaps</CardTitle>
-                                    <p className="text-xs text-muted-foreground mt-0.5">Requirements not found in your resume</p>
+                                    <CardTitle className="text-base sm:text-lg font-bold text-foreground">Key Missing Skills & Gaps</CardTitle>
+                                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">Requirements not found in your resume</p>
                                 </div>
                             </div>
-                            <Badge variant="secondary" className="bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full">
+                            <Badge variant="secondary" className="bg-amber-100 text-amber-800 font-semibold px-2 sm:px-2.5 py-0.5 rounded-full text-xs">
                                 {missingSkills.length}
                             </Badge>
                         </div>
                     </CardHeader>
 
-                    <CardContent className="p-6 flex-1 flex flex-col">
+                    <CardContent className="p-4 sm:p-6 flex-1 flex flex-col">
                         {missingSkills.length > 0 ? (
-                            <div className="flex flex-wrap gap-2.5">
+                            <div className="flex flex-wrap gap-2 sm:gap-2.5">
                                 {missingSkills.map((skill, index) => (
                                     <Badge
                                         key={`${skill}-${index}`}
                                         variant="outline"
-                                        className="py-1.5 px-3 rounded-xl border-amber-200 bg-amber-50/50 text-amber-900 font-medium text-xs sm:text-sm flex items-center gap-1.5"
+                                        className="py-1 sm:py-1.5 px-2.5 sm:px-3 rounded-lg sm:rounded-xl border-amber-200 bg-amber-50/50 text-amber-900 font-medium text-xs sm:text-sm flex items-center gap-1.5 max-w-full break-words"
                                     >
                                         <BadgeAlert className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                                        {skill}
+                                        <span className="break-words">{skill}</span>
                                     </Badge>
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center py-8 text-center text-emerald-600">
-                                <CheckCircle2 className="w-8 h-8 mb-2" />
-                                <p className="text-sm font-medium">All listed requirements are covered in your profile!</p>
+                            <div className="flex-1 flex flex-col items-center justify-center py-6 sm:py-8 text-center text-emerald-600">
+                                <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8 mb-2" />
+                                <p className="text-xs sm:text-sm font-medium">All listed requirements are covered in your profile!</p>
                             </div>
                         )}
                     </CardContent>
@@ -274,17 +254,17 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
             </div>
 
             {/* Bottom Save & History Banner */}
-            <Card className="rounded-3xl border border-slate-200/80 bg-linear-to-r from-slate-50 via-blue-50/20 to-slate-50 shadow-sm">
-                <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 p-6 sm:p-7">
-                    <div className="flex items-start gap-4">
-                        <div className="p-3 rounded-2xl bg-blue-100 text-blue-600 shrink-0 mt-0.5">
-                            <Bookmark className="w-6 h-6" />
+            <Card className="rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-linear-to-r from-slate-50 via-blue-50/20 to-slate-50 shadow-sm">
+                <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5 p-4 sm:p-6 md:p-7">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                        <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-blue-100 text-blue-600 shrink-0 mt-0.5">
+                            <Bookmark className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>
                         <div className="flex flex-col gap-1">
                             <h3 className="font-semibold text-base sm:text-lg text-foreground">
                                 {isAuthenticated ? (isSaved ? "This result is saved to your account" : "Save this match report") : "Keep your results accessible anywhere"}
                             </h3>
-                            <p className="text-sm text-muted-foreground max-w-2xl">
+                            <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl">
                                 {isAuthenticated
                                     ? "Saved analyses can be referenced and reviewed anytime from your account history."
                                     : "Sign in or register for free to save your match scores, track applications, and benchmark roles."}
@@ -318,7 +298,7 @@ export default function ResultSection({ startOver, analysisResult, jdText = "", 
                                     </Button>
                                 }
                             />
-                            <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-4" align="end" sideOffset={8}>
+                            <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-4 max-w-sm" align="end" sideOffset={8}>
                                 <div className="flex flex-col gap-3">
                                     <div className="flex flex-col gap-1">
                                         <label htmlFor="labelInput" className="text-sm font-medium text-foreground">
